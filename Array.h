@@ -1,31 +1,28 @@
 /*
-北京大学《C++语言程序设计》课程
-模拟Vector实现作业
-by S.Hu
-Array类头文件
-2015/10
-调试环境：Microsoft Visual Studio 2015
+* C++ Programming, Assignment 2
+* Array
+* by S.Hu
 */
 #pragma once
 #ifndef ARRAY_H
 #define ARRAY_H
 #include<stdexcept>
-#pragma warning(disable: 4290)
+#pragma warning(disable: 4290)//C++ exception specification ignored except to indicate a function is not __declspec(nothrow)
 
 template<typename T>
 class Array {
 public:
-	/*相关数据类型*/
+	/* types */
 	typedef T value_type;
 	typedef unsigned int size_type;
 	typedef int difference_type;
-	typedef value_type& reference;
-	typedef const value_type& const_reference;
-	typedef value_type* pointer;
-	typedef const value_type* const_pointer;
+	typedef value_type &reference;
+	typedef const value_type &const_reference;
+	typedef value_type *pointer;
+	typedef const value_type *const_pointer;
 
-	/*四种迭代器类型*/
-	//常量迭代器
+	/* Iterators */
+	//const_iterator (base)
 	class const_iterator {
 	public:
 		typedef std::random_access_iterator_tag iterator_category;
@@ -60,8 +57,9 @@ public:
 		value_type *Ptr;
 		friend Array;
 	};
-	//非常量迭代器(继承自常量迭代器，可赋值给常量迭代器)
-	class iterator :public const_iterator {
+
+	//iterator(继承自const_iterator)
+	class iterator : public const_iterator {
 	public:
 		typedef typename Array::pointer pointer;
 		typedef typename Array::reference reference;
@@ -83,22 +81,27 @@ public:
 		iterator operator--(int);
 		iterator &operator+=(difference_type dif);
 		iterator &operator-=(difference_type dif);
-	
+
 		friend Array;
 	};
-	typedef std::reverse_iterator<const_iterator> const_reverse_iterator;//常量反向迭代器
-	typedef std::reverse_iterator<iterator> reverse_iterator;//反向迭代器
+
+	//常量反向迭代器
+	typedef std::reverse_iterator<const_iterator> const_reverse_iterator;
+	//反向迭代器
+	typedef std::reverse_iterator<iterator> reverse_iterator;
 
 	/*
-	--------------函数声明--------------
+	--------------functions--------------
 	*/
 
-	/*构造、析构、赋值运算符相关函数*/
+	/* constructors, destructor, assignment operators */
 	explicit Array(size_type size = 0, const value_type &initVal = value_type());//从指定大小和初值构造
 	Array(const Array &it);//复制构造
+	Array(Array &&it);//转移构造
 	Array(const_iterator first, const_iterator last);//从给定范围复制
 	Array(std::initializer_list<value_type> initVals);//从初始化列表构造
 	Array &operator=(const Array &it);//拷贝赋值
+	Array &operator=(Array &&it);//转移赋值
 	Array &operator=(std::initializer_list<value_type> Vals);//初始化列表赋值
 	~Array();//析构
 
@@ -133,16 +136,16 @@ public:
 	const_reference back()const;//返回尾元素常引用
 	const_reference operator[](size_type pos)const;//返回下标为pos的元素的常引用（无边界检查）
 	const_reference at(size_type pos)const throw(std::out_of_range);//返回下标为pos的元素的引用
-	
+
 	/*数据修改相关函数*/
 	void push_back(const value_type &Val); //向末尾添加元素
 	void pop_back();//弹出尾元素
 	void swap(Array<value_type> &it);//交换两个Array
 	iterator insert(iterator pos, const size_type n, const value_type &Val = value_type())throw(std::out_of_range);//在插入点插入n个相同元素
 	iterator insert(iterator pos, const value_type &Val = value_type())throw(std::out_of_range);//在插入点插入元素
-	iterator insert(iterator pos, const_iterator first, const_iterator last)throw(std::out_of_range);//在插入点插入指定范围的元素												
+	iterator insert(iterator pos, const_iterator first, const_iterator last)throw(std::out_of_range);//在插入点插入指定范围的元素
 	iterator erase(iterator pos)throw(std::out_of_range);//删除指定元素，返回后一个元素的迭代器（或end()）
-	iterator erase(iterator first, iterator last)throw(std::out_of_range,std::invalid_argument);//删除迭代器指定的一段元素，返回后一个元素的迭代器（或end()）
+	iterator erase(iterator first, iterator last)throw(std::out_of_range, std::invalid_argument);//删除迭代器指定的一段元素，返回后一个元素的迭代器（或end()）
 	void clear();//清空
 	void assign(const_iterator first, const_iterator last)throw(std::invalid_argument);//复制范围赋值
 	void assign(size_type n, const value_type &Val = value_type());//赋值，用指定元素序列覆盖容器内所有元素
@@ -163,7 +166,7 @@ private:
 */
 
 template<typename T>
-inline Array<T>::const_iterator::const_iterator() :Ptr(nullptr) {}
+inline Array<T>::const_iterator::const_iterator() : Ptr(nullptr) {}
 template<typename T>
 inline Array<T>::const_iterator::const_iterator(value_type *ptr) : Ptr(ptr) {}
 template<typename T>
@@ -256,9 +259,9 @@ inline bool Array<T>::const_iterator::operator>=(const_iterator rightVal) const 
 */
 
 template<typename T>
-inline Array<T>::iterator::iterator() :iterBase(nullptr) {}
+inline Array<T>::iterator::iterator() : iterBase(nullptr) {}
 template<typename T>
-inline Array<T>::iterator::iterator(value_type *ptr) :iterBase(ptr) {}
+inline Array<T>::iterator::iterator(value_type *ptr) : iterBase(ptr) {}
 template<typename T>
 inline typename Array<T>::iterator::reference Array<T>::iterator::operator*() const {
 	return *Ptr;
@@ -332,10 +335,12 @@ inline typename Array<T>::iterator &Array<T>::iterator::operator-=(difference_ty
 /*构造、析构、赋值运算符相关函数*/
 //从指定大小和初值构造
 template<typename T>
-Array<T>::Array(size_type size, const value_type& initVal) {
+Array<T>::Array(size_type size, const value_type &initVal) {
 	Start = new value_type[size];
 	End = Finish = Start + size;
-	for (pointer iLoop = Start;iLoop != End;++iLoop) { *iLoop = initVal; }
+
+	for (pointer iLoop = Start; iLoop != End; ++iLoop)
+		*iLoop = initVal;
 }
 //复制构造
 template<typename T>
@@ -343,51 +348,86 @@ Array<T>::Array(const Array &it) {
 	const size_type targetSize = it.size();
 	Start = new value_type[targetSize];
 	End = Finish = Start + targetSize;
-	for (size_type iLoop = 0;iLoop < targetSize;++iLoop) { Start[iLoop] = it[iLoop]; }
+
+	for (size_type iLoop = 0; iLoop < targetSize; ++iLoop)
+		Start[iLoop] = it[iLoop];
 }
+
+//转移构造
+template<typename T>
+Array<T>::Array(Array &&it) {
+	Start = it.Start;
+	End = it.End;
+	Finish = it.Finish;
+	it.Start = it.End = it.Finish = nullptr;
+}
+
 //从给定范围复制
 template<typename T>
-Array<T>::Array(const_iterator first, const_iterator last){
+Array<T>::Array(const_iterator first, const_iterator last) {
 	if (last < first) throw std::invalid_argument("interval invalid!");
+
 	size_type n = last - first;
 	Start = new value_type[n];
 	End = Finish = Start + n;
-	for (size_type iLoop = 0;iLoop < n;++iLoop) Start[iLoop] = first[iLoop];
+
+	for (size_type iLoop = 0; iLoop < n; ++iLoop) Start[iLoop] = first[iLoop];
 }
 //从初始化列表构造
 template<typename T>
-Array<T>::Array(std::initializer_list<value_type> initVals){
+Array<T>::Array(std::initializer_list<value_type> initVals) {
 	size_type n = initVals.size();
-	Start=new value_type[n];
+	Start = new value_type[n];
 	End = Finish = Start + n;
-	for (size_type iLoop = 0;iLoop < n;++iLoop) Start[iLoop] = *(initVals.begin() + iLoop);
+
+	for (size_type iLoop = 0; iLoop < n; ++iLoop) Start[iLoop] = *(initVals.begin() + iLoop);
 }
 
 //拷贝赋值
 template<typename T>
 inline Array<T> &Array<T>::operator=(const Array &it) {
-	if (&it != this) {//非自赋值才执行操作
+	if (&it != this)  //非自赋值才执行操作
 		assign(it.begin(), it.end());
-	}
+
 	return *this;
 }
+
+//转移赋值
+template<typename T>
+inline Array<T> &Array<T>::operator=(Array &&it) {
+	if (&it != this) {//非自赋值才执行操作
+		Start = it.Start;
+		End = it.End;
+		Finish = it.Finish;
+		it.Start = it.End = it.Finish = nullptr;
+	}
+
+	return *this;
+}
+
 //初始化列表赋值
 template<typename T>
-Array<T> &Array<T>::operator=(std::initializer_list<value_type> Vals){
+Array<T> &Array<T>::operator=(std::initializer_list<value_type> Vals) {
 	size_type n = Vals.size();
+
 	if (capacity() < n) {
 		delete[]Start;
 		Start = new value_type[n];
 		End = Start + n;
 	}
+
 	Finish = Start + n;
-	for (size_type iLoop = 0;iLoop < n;++iLoop) Start[iLoop] = Vals.begin()[iLoop];
+
+	for (size_type iLoop = 0; iLoop < n; ++iLoop) Start[iLoop] = Vals.begin()[iLoop];
+
 	return *this;
 }
 
 //析构
 template<typename T>
-inline Array<T>::~Array() { delete[]Start; }
+inline Array<T>::~Array() {
+	delete[]Start;
+}
 
 /*容量相关函数*/
 //确保capacity()>=n
@@ -395,8 +435,13 @@ template<typename T>
 void Array<T>::reserve(size_type n) {
 	if (capacity() < n) {
 		pointer tmp = new value_type[n];
-		for (size_type iLoop = 0;iLoop < size();++iLoop) { tmp[iLoop] = Start[iLoop]; }
-		for (size_type iLoop = size();iLoop < n;++iLoop) { tmp[iLoop] = value_type(); }
+
+		for (size_type iLoop = 0; iLoop < size(); ++iLoop)
+			tmp[iLoop] = Start[iLoop];
+
+		for (size_type iLoop = size(); iLoop < n; ++iLoop)
+			tmp[iLoop] = value_type();
+
 		delete[]Start;
 		Finish = tmp + size();
 		Start = tmp;
@@ -407,98 +452,149 @@ void Array<T>::reserve(size_type n) {
 template<typename T>
 void Array<T>::resize(size_type n, const value_type &initVal) {
 	const size_type oldSize = size();
+
 	if (oldSize == n)return;
+
 	if (capacity() < n) {
 		pointer tmp = new value_type[n];
-		for (size_type iLoop = 0;iLoop < oldSize;++iLoop) { tmp[iLoop] = Start[iLoop]; }
-		for (size_type iLoop = oldSize;iLoop < n;++iLoop) { tmp[iLoop] = initVal; }
+
+		for (size_type iLoop = 0; iLoop < oldSize; ++iLoop)
+			tmp[iLoop] = Start[iLoop];
+
+		for (size_type iLoop = oldSize; iLoop < n; ++iLoop)
+			tmp[iLoop] = initVal;
+
 		delete[]Start;
 		Start = tmp;
 		End = Finish = Start + n;
-	}
-	else {
+	} else
 		Finish = Start + n;
-	}
 }
 //容器是否为空
 template<typename T>
-inline bool Array<T>::empty() const { return Start == Finish; }
+inline bool Array<T>::empty() const {
+	return Start == Finish;
+}
 //系统最大元素个数
 template<typename T>
-inline unsigned int Array<T>::max_size() const { return size_type(-1) / sizeof(value_type); }
+inline unsigned int Array<T>::max_size() const {
+	return size_type(-1) / sizeof(value_type);
+}
 //容器中元素个数
 template<typename T>
-inline unsigned int Array<T>::size() const { return Finish - Start; }
+inline unsigned int Array<T>::size() const {
+	return Finish - Start;
+}
 //容器中能够存储的元素个数，有capacity()>=size()
 template<typename T>
-inline unsigned int Array<T>::capacity() const { return End - Start; }
+inline unsigned int Array<T>::capacity() const {
+	return End - Start;
+}
 
 /*迭代器相关函数*/
 //返回容器首迭代器
-template<typename T> 
-inline iterator Array<T>::begin() { return iterator(Start); }
+template<typename T>
+inline iterator Array<T>::begin() {
+	return iterator(Start);
+}
 //返回容器尾迭代器
 template<typename T>
-inline iterator Array<T>::end() { return iterator(Finish); }
+inline iterator Array<T>::end() {
+	return iterator(Finish);
+}
 template<typename T>
 //返回容器反向首迭代器
-inline reverse_iterator Array<T>::rbegin(){ return reverse_iterator(end()); }
+inline reverse_iterator Array<T>::rbegin() {
+	return reverse_iterator(end());
+}
 //返回容器反向尾迭代器
 template<typename T>
-inline reverse_iterator Array<T>::rend(){ return reverse_iterator(begin()); }
+inline reverse_iterator Array<T>::rend() {
+	return reverse_iterator(begin());
+}
 //返回容器首常量迭代器
 template<typename T>
-inline  const_iterator Array<T>::begin() const { return const_iterator(Start); }
+inline  const_iterator Array<T>::begin() const {
+	return const_iterator(Start);
+}
 //返回容器尾常量迭代器
 template<typename T>
-inline const_iterator Array<T>::end() const { return const_iterator(Finish); }
+inline const_iterator Array<T>::end() const {
+	return const_iterator(Finish);
+}
 //返回容器常量反向首迭代器
 template<typename T>
-inline const_reverse_iterator Array<T>::rbegin() const { return const_reverse_iterator(end()); }
+inline const_reverse_iterator Array<T>::rbegin() const {
+	return const_reverse_iterator(end());
+}
 //返回容器常量反向尾迭代器
 template<typename T>
-inline const_reverse_iterator Array<T>::rend() const { return const_reverse_iterator(begin()); }
+inline const_reverse_iterator Array<T>::rend() const {
+	return const_reverse_iterator(begin());
+}
 //返回容器首常量迭代器
 template<typename T>
-inline  const_iterator Array<T>::cbegin() const { return begin(); }
+inline  const_iterator Array<T>::cbegin() const {
+	return begin();
+}
 //返回容器尾常量迭代器
 template<typename T>
-inline const_iterator Array<T>::cend() const { return end(); }
+inline const_iterator Array<T>::cend() const {
+	return end();
+}
 //返回容器常量反向首迭代器
 template<typename T>
-inline const_reverse_iterator Array<T>::crbegin() const { return rbegin(); }
+inline const_reverse_iterator Array<T>::crbegin() const {
+	return rbegin();
+}
 //返回容器常量反向尾迭代器
 template<typename T>
-inline const_reverse_iterator Array<T>::crend() const { return rend(); }
+inline const_reverse_iterator Array<T>::crend() const {
+	return rend();
+}
 /*数据读取相关函数*/
 //返回首元素引用
 template<typename T>
-inline T& Array<T>::front() { return *Start; }
+inline T &Array<T>::front() {
+	return *Start;
+}
 //返回尾元素引用
 template<typename T>
-inline T& Array<T>::back() { return *(Finish - 1); }
+inline T &Array<T>::back() {
+	return *(Finish - 1);
+}
 //返回下标为pos的元素的引用（无边界检查）
 template<typename T>
-inline T& Array<T>::operator[](size_type pos) { return Start[pos]; }
+inline T &Array<T>::operator[](size_type pos) {
+	return Start[pos];
+}
 //返回下标为pos的元素的引用
 template<typename T>
-inline T& Array<T>::at(size_type pos) {
+inline T &Array<T>::at(size_type pos) {
 	if (pos >= size()) throw std::out_of_range("offset out of range!");
+
 	return Start[pos];
 }
 //返回首元素常引用
 template<typename T>
-inline const T& Array<T>::front()const { return *Start; }
+inline const T &Array<T>::front()const {
+	return *Start;
+}
 //返回尾元素常引用
 template<typename T>
-inline const T& Array<T>::back()const { return *(Finish - 1); }
+inline const T &Array<T>::back()const {
+	return *(Finish - 1);
+}
 //返回下标为pos的元素的常引用（无边界检查）
 template<typename T>
-inline const T& Array<T>::operator[](size_type pos)const { return Start[pos]; }
+inline const T &Array<T>::operator[](size_type pos)const {
+	return Start[pos];
+}
 //返回下标为pos的元素的常引用
 template<typename T>
-inline const T& Array<T>::at(size_type pos)const {
+inline const T &Array<T>::at(size_type pos)const {
 	if (pos >= size()) throw std::out_of_range("offset out of range!");
+
 	return Start[pos];
 }
 
@@ -507,14 +603,18 @@ inline const T& Array<T>::at(size_type pos)const {
 template<typename T>
 void Array<T>::push_back(const value_type &Val) {
 	if (Finish == End) {//无可用空间
-		if (End == Start)reserve(1);else reserve(3 * size() / 2);//容量是否为0
+		if (End == Start)reserve(1);
+		else reserve(3 * size() / 2);//容量是否为0
 	}
+
 	*Finish = Val;
 	++Finish;
 }
 //弹出尾元素
 template<typename T>
-inline void Array<T>::pop_back() { if (Finish != Start) --Finish; }
+inline void Array<T>::pop_back() {
+	if (Finish != Start) --Finish;
+}
 
 //交换两个Array
 template<typename T>
@@ -522,11 +622,9 @@ inline void Array<T>::swap(Array<T> &it) {
 	pointer tmp = Start;
 	Start = it.Start;
 	it.Start = tmp;
-
 	tmp = Finish;
 	Finish = it.Finish;
 	it.Finish = tmp;
-
 	tmp = End;
 	End = it.End;
 	it.End = tmp;
@@ -540,26 +638,38 @@ inline void swap(Array<T> &leftVal, Array<T> &rightVal) {
 template<typename T>
 iterator Array<T>::insert(iterator pos, const size_type n, const value_type &Val) {
 	if (0 == n)return pos;
+
 	if (pos.Ptr < Start || pos.Ptr > Finish) throw std::out_of_range("iterator out of range!");
 
 	if (size_type(End - Finish) >= n) {//还有可用空间
-		for (pointer iLoop = Finish;iLoop >= pos.Ptr;--iLoop) {
+		for (pointer iLoop = Finish; iLoop >= pos.Ptr; --iLoop)
 			iLoop[n] = *iLoop;
-		}
+
 		Finish += n;
-		for (size_type iLoop = 0;iLoop < n;++iLoop) { pos[iLoop] = Val; }
+
+		for (size_type iLoop = 0; iLoop < n; ++iLoop)
+			pos[iLoop] = Val;
+
 		return pos;
-	}
-	else {//无可用空间
+	} else { //无可用空间
 		const size_type oldSize = size();
 		const size_type targetCap = oldSize + (n > oldSize / 2 ? n : (oldSize / 2));
 		const size_type position = pos.Ptr - Start;
 		//重新分配空间，复制数据
 		pointer tmp = new value_type[targetCap];
-		for (size_type iLoop = 0;iLoop < position;++iLoop) { tmp[iLoop] = Start[iLoop]; }
-		for (size_type iLoop = position;iLoop < position + n;++iLoop) { tmp[iLoop] = Val; }
-		for (size_type iLoop = position + n;iLoop < oldSize + n;++iLoop) { tmp[iLoop] = Start[iLoop - n]; }
-		for (size_type iLoop = oldSize + n;iLoop < targetCap;++iLoop) { tmp[iLoop] = value_type(); }
+
+		for (size_type iLoop = 0; iLoop < position; ++iLoop)
+			tmp[iLoop] = Start[iLoop];
+
+		for (size_type iLoop = position; iLoop < position + n; ++iLoop)
+			tmp[iLoop] = Val;
+
+		for (size_type iLoop = position + n; iLoop < oldSize + n; ++iLoop)
+			tmp[iLoop] = Start[iLoop - n];
+
+		for (size_type iLoop = oldSize + n; iLoop < targetCap; ++iLoop)
+			tmp[iLoop] = value_type();
+
 		//撤销旧空间，修改指针
 		delete[]Start;
 		Start = tmp;
@@ -573,27 +683,42 @@ iterator Array<T>::insert(iterator pos, const size_type n, const value_type &Val
 template<typename T>
 iterator Array<T>::insert(iterator pos, const_iterator first, const_iterator last) {
 	if (pos.Ptr < Start || pos.Ptr > Finish) throw std::out_of_range("iterator out of range!");
+
 	if (last < first) throw std::invalid_argument("interval invalid!");
+
 	const size_type n = last - first;
+
 	if (0 == n)return pos;
+
 	if (size_type(End - Finish) >= n) {//还有可用空间
-		for (pointer iLoop = Finish;iLoop >= pos.Ptr;--iLoop) {
+		for (pointer iLoop = Finish; iLoop >= pos.Ptr; --iLoop)
 			*(iLoop + 1) = *iLoop;
-		}
+
 		Finish += n;
-		for (size_type iLoop = 0;iLoop < n;++iLoop) { pos[iLoop] = first[iLoop]; }//赋值
+
+		for (size_type iLoop = 0; iLoop < n; ++iLoop)
+			pos[iLoop] = first[iLoop]; //赋值
+
 		return pos;
-	}
-	else {//无可用空间
+	} else { //无可用空间
 		const size_type oldSize = size();
 		const size_type targetCap = oldSize + (n > oldSize / 2 ? n : (oldSize / 2));
 		const size_type position = pos.Ptr - Start;
 		//重新分配空间，复制数据
 		pointer tmp = new value_type[targetCap];
-		for (size_type iLoop = 0;iLoop < position;++iLoop) { tmp[iLoop] = Start[iLoop]; }
-		for (size_type iLoop = position;iLoop < position + n;++iLoop) { tmp[iLoop] = *(first++); }//赋值
-		for (size_type iLoop = position + n;iLoop < oldSize + n;++iLoop) { tmp[iLoop] = *(Start + iLoop - n); }
-		for (size_type iLoop = oldSize + n;iLoop < targetCap;++iLoop) { tmp[iLoop] = value_type(); }
+
+		for (size_type iLoop = 0; iLoop < position; ++iLoop)
+			tmp[iLoop] = Start[iLoop];
+
+		for (size_type iLoop = position; iLoop < position + n; ++iLoop)
+			tmp[iLoop] = *(first++); //赋值
+
+		for (size_type iLoop = position + n; iLoop < oldSize + n; ++iLoop)
+			tmp[iLoop] = *(Start + iLoop - n);
+
+		for (size_type iLoop = oldSize + n; iLoop < targetCap; ++iLoop)
+			tmp[iLoop] = value_type();
+
 		//撤销旧空间，修改指针
 		delete[]Start;
 		Start = tmp;
@@ -613,7 +738,10 @@ inline iterator Array<T>::insert(iterator pos, const value_type &Val) {
 template<typename T>
 iterator Array<T>::erase(iterator pos) {
 	if (pos.Ptr < Start || pos.Ptr > Finish) throw std::out_of_range("iterator out of range!");
-	for (pointer iLoop = pos.Ptr;iLoop != Finish - 1;++iLoop) { *iLoop = *(iLoop + 1); }
+
+	for (pointer iLoop = pos.Ptr; iLoop != Finish - 1; ++iLoop)
+		*iLoop = *(iLoop + 1);
+
 	--Finish;
 	return pos;
 }
@@ -622,58 +750,73 @@ iterator Array<T>::erase(iterator pos) {
 template<typename T>
 iterator Array<T>::erase(iterator first, iterator last) {
 	if (first.Ptr < Start || last.Ptr > Finish) throw std::out_of_range("iterator out of range!");
+
 	const size_type n = last - first;
+
 	if (n > size()) throw std::invalid_argument("interval invalid!");
-	for (pointer iLoop = first.Ptr;iLoop != Finish - n;++iLoop) { *iLoop = *(iLoop + n); }
+
+	for (pointer iLoop = first.Ptr; iLoop != Finish - n; ++iLoop)
+		*iLoop = *(iLoop + n);
+
 	Finish -= n;
 	return first;
 }
 
 //清空
 template<typename T>
-inline void Array<T>::clear() { Finish = Start; }
+inline void Array<T>::clear() {
+	Finish = Start;
+}
 
 //复制范围赋值
 template<typename T>
-void Array<T>::assign(const_iterator first, const_iterator last){
+void Array<T>::assign(const_iterator first, const_iterator last) {
 	if (last.Ptr < first.Ptr) throw std::invalid_argument("interval invalid!");
+
 	size_type n = last - first;
+
 	if (capacity() < n) {
 		delete[]Start;
 		Start = new value_type[n];
 		End = Start + n;
 	}
+
 	Finish = Start + n;
-	for (size_type iLoop = 0;iLoop < n;++iLoop) Start[iLoop] = first[iLoop];
+
+	for (size_type iLoop = 0; iLoop < n; ++iLoop) Start[iLoop] = first[iLoop];
 }
 
 //赋值，用指定元素序列覆盖容器内所有元素
 template<typename T>
-void Array<T>::assign(size_type n, const value_type &Val){
+void Array<T>::assign(size_type n, const value_type &Val) {
 	if (capacity() < n) {
 		delete[]Start;
 		Start = new value_type[n];
 		End = Start + n;
 	}
-	for (Finish = Start;size() < n;++Finish) *Finish = Val;
+
+	for (Finish = Start; size() < n; ++Finish) *Finish = Val;
 }
 
 /*容器元素比较*/
 template<typename T>
-bool Array<T>::operator==(Array<value_type> rightVal){
+bool Array<T>::operator==(Array<value_type> rightVal) {
 	if (size() != rightVal.size())return false;
+
 	bool isEqu = true;
-	for (size_type iLoop = 0;iLoop < size();++iLoop) {
+
+	for (size_type iLoop = 0; iLoop < size(); ++iLoop) {
 		if (Start[iLoop] != rightVal[iLoop]) {
 			isEqu = false;
 			break;
 		}
 	}
+
 	return isEqu;
 }
 
 template<typename T>
-inline bool Array<T>::operator!=(Array<value_type> rightVal){
+inline bool Array<T>::operator!=(Array<value_type> rightVal) {
 	return !(*this == rightVal);
 }
 
