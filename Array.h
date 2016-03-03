@@ -58,7 +58,7 @@ public:
 		friend Array;
 	};
 
-	//iterator(¼Ì³Ğ×Ôconst_iterator)
+	//iterator(ç»§æ‰¿è‡ªconst_iterator)
 	class iterator : public const_iterator {
 	public:
 		typedef typename Array::pointer pointer;
@@ -85,9 +85,9 @@ public:
 		friend Array;
 	};
 
-	//³£Á¿·´Ïòµü´úÆ÷
+	//å¸¸é‡åå‘è¿­ä»£å™¨
 	typedef std::reverse_iterator<const_iterator> const_reverse_iterator;
-	//·´Ïòµü´úÆ÷
+	//åå‘è¿­ä»£å™¨
 	typedef std::reverse_iterator<iterator> reverse_iterator;
 
 	/*
@@ -95,69 +95,69 @@ public:
 	*/
 
 	/* constructors, destructor, assignment operators */
-	explicit Array(size_type size = 0, const value_type &initVal = value_type());//´ÓÖ¸¶¨´óĞ¡ºÍ³õÖµ¹¹Ôì
-	Array(const Array &it);//¸´ÖÆ¹¹Ôì
-	Array(Array &&it);//×ªÒÆ¹¹Ôì
-	Array(const_iterator first, const_iterator last);//´Ó¸ø¶¨·¶Î§¸´ÖÆ
-	Array(std::initializer_list<value_type> initVals);//´Ó³õÊ¼»¯ÁĞ±í¹¹Ôì
-	Array &operator=(const Array &it);//¿½±´¸³Öµ
-	Array &operator=(Array &&it);//×ªÒÆ¸³Öµ
-	Array &operator=(std::initializer_list<value_type> Vals);//³õÊ¼»¯ÁĞ±í¸³Öµ
-	~Array();//Îö¹¹
+	explicit Array(size_type size = 0, const value_type &initVal = value_type());//ä»æŒ‡å®šå¤§å°å’Œåˆå€¼æ„é€ 
+	Array(const Array &it);//å¤åˆ¶æ„é€ 
+	Array(Array &&it);//è½¬ç§»æ„é€ 
+	Array(const_iterator first, const_iterator last);//ä»ç»™å®šèŒƒå›´å¤åˆ¶
+	Array(std::initializer_list<value_type> initVals);//ä»åˆå§‹åŒ–åˆ—è¡¨æ„é€ 
+	Array &operator=(const Array &it);//æ‹·è´èµ‹å€¼
+	Array &operator=(Array &&it);//è½¬ç§»èµ‹å€¼
+	Array &operator=(std::initializer_list<value_type> Vals);//åˆå§‹åŒ–åˆ—è¡¨èµ‹å€¼
+	~Array();//ææ„
 
-	/*ÈİÁ¿Ïà¹Øº¯Êı*/
-	void reserve(size_type n);//È·±£capacity()>=n
-	void resize(size_type n, const value_type &initVal = value_type());//È·±£size()==n
-	bool empty() const;//ÈİÆ÷ÊÇ·ñÎª¿Õ
-	size_type size() const;//ÈİÆ÷ÖĞÔªËØ¸öÊı
-	size_type max_size() const;//ÏµÍ³ÔÊĞí×î´óÔªËØ¸öÊı
-	size_type capacity() const;//ÈİÆ÷ÖĞÄÜ¹»´æ´¢µÄÔªËØ¸öÊı£¬ÓĞcapacity()>=size()
+	/*å®¹é‡ç›¸å…³å‡½æ•°*/
+	void reserve(size_type n);//ç¡®ä¿capacity()>=n
+	void resize(size_type n, const value_type &initVal = value_type());//ç¡®ä¿size()==n
+	bool empty() const;//å®¹å™¨æ˜¯å¦ä¸ºç©º
+	size_type size() const;//å®¹å™¨ä¸­å…ƒç´ ä¸ªæ•°
+	size_type max_size() const;//ç³»ç»Ÿå…è®¸æœ€å¤§å…ƒç´ ä¸ªæ•°
+	size_type capacity() const;//å®¹å™¨ä¸­èƒ½å¤Ÿå­˜å‚¨çš„å…ƒç´ ä¸ªæ•°ï¼Œæœ‰capacity()>=size()
 
-	/*µü´úÆ÷Ïà¹Øº¯Êı*/
-	iterator begin();//·µ»ØÈİÆ÷Ê×µü´úÆ÷
-	iterator end();//·µ»ØÈİÆ÷Î²µü´úÆ÷
-	reverse_iterator rbegin();//·µ»ØÈİÆ÷·´ÏòÊ×µü´úÆ÷
-	reverse_iterator rend();//·µ»ØÈİÆ÷·´ÏòÎ²µü´úÆ÷
-	const_iterator begin()const;//·µ»ØÈİÆ÷Ê×³£Á¿µü´úÆ÷
-	const_iterator end()const;//·µ»ØÈİÆ÷Î²³£Á¿µü´úÆ÷
-	const_reverse_iterator rbegin()const;//·µ»ØÈİÆ÷³£Á¿·´ÏòÊ×µü´úÆ÷
-	const_reverse_iterator rend()const;//·µ»ØÈİÆ÷³£Á¿·´ÏòÎ²µü´úÆ÷
-	const_iterator cbegin()const;//·µ»ØÈİÆ÷Ê×³£Á¿µü´úÆ÷
-	const_iterator cend()const;//·µ»ØÈİÆ÷Î²³£Á¿µü´úÆ÷
-	const_reverse_iterator crbegin()const;//·µ»ØÈİÆ÷³£Á¿·´ÏòÊ×µü´úÆ÷
-	const_reverse_iterator crend()const;//·µ»ØÈİÆ÷³£Á¿·´ÏòÎ²µü´úÆ÷
+	/*è¿­ä»£å™¨ç›¸å…³å‡½æ•°*/
+	iterator begin();//è¿”å›å®¹å™¨é¦–è¿­ä»£å™¨
+	iterator end();//è¿”å›å®¹å™¨å°¾è¿­ä»£å™¨
+	reverse_iterator rbegin();//è¿”å›å®¹å™¨åå‘é¦–è¿­ä»£å™¨
+	reverse_iterator rend();//è¿”å›å®¹å™¨åå‘å°¾è¿­ä»£å™¨
+	const_iterator begin()const;//è¿”å›å®¹å™¨é¦–å¸¸é‡è¿­ä»£å™¨
+	const_iterator end()const;//è¿”å›å®¹å™¨å°¾å¸¸é‡è¿­ä»£å™¨
+	const_reverse_iterator rbegin()const;//è¿”å›å®¹å™¨å¸¸é‡åå‘é¦–è¿­ä»£å™¨
+	const_reverse_iterator rend()const;//è¿”å›å®¹å™¨å¸¸é‡åå‘å°¾è¿­ä»£å™¨
+	const_iterator cbegin()const;//è¿”å›å®¹å™¨é¦–å¸¸é‡è¿­ä»£å™¨
+	const_iterator cend()const;//è¿”å›å®¹å™¨å°¾å¸¸é‡è¿­ä»£å™¨
+	const_reverse_iterator crbegin()const;//è¿”å›å®¹å™¨å¸¸é‡åå‘é¦–è¿­ä»£å™¨
+	const_reverse_iterator crend()const;//è¿”å›å®¹å™¨å¸¸é‡åå‘å°¾è¿­ä»£å™¨
 
-	/*Êı¾İ¶ÁÈ¡Ïà¹Øº¯Êı*/
-	reference front();//·µ»ØÊ×ÔªËØÒıÓÃ
-	reference back();//·µ»ØÎ²ÔªËØÒıÓÃ
-	reference operator[](size_type pos);//·µ»ØÏÂ±êÎªposµÄÔªËØµÄÒıÓÃ£¨ÎŞ±ß½ç¼ì²é£©
-	reference at(size_type pos)throw(std::out_of_range);//·µ»ØÏÂ±êÎªposµÄÔªËØµÄÒıÓÃ
-	const_reference front()const;//·µ»ØÊ×ÔªËØ³£ÒıÓÃ
-	const_reference back()const;//·µ»ØÎ²ÔªËØ³£ÒıÓÃ
-	const_reference operator[](size_type pos)const;//·µ»ØÏÂ±êÎªposµÄÔªËØµÄ³£ÒıÓÃ£¨ÎŞ±ß½ç¼ì²é£©
-	const_reference at(size_type pos)const throw(std::out_of_range);//·µ»ØÏÂ±êÎªposµÄÔªËØµÄÒıÓÃ
+	/*æ•°æ®è¯»å–ç›¸å…³å‡½æ•°*/
+	reference front();//è¿”å›é¦–å…ƒç´ å¼•ç”¨
+	reference back();//è¿”å›å°¾å…ƒç´ å¼•ç”¨
+	reference operator[](size_type pos);//è¿”å›ä¸‹æ ‡ä¸ºposçš„å…ƒç´ çš„å¼•ç”¨ï¼ˆæ— è¾¹ç•Œæ£€æŸ¥ï¼‰
+	reference at(size_type pos)throw(std::out_of_range);//è¿”å›ä¸‹æ ‡ä¸ºposçš„å…ƒç´ çš„å¼•ç”¨
+	const_reference front()const;//è¿”å›é¦–å…ƒç´ å¸¸å¼•ç”¨
+	const_reference back()const;//è¿”å›å°¾å…ƒç´ å¸¸å¼•ç”¨
+	const_reference operator[](size_type pos)const;//è¿”å›ä¸‹æ ‡ä¸ºposçš„å…ƒç´ çš„å¸¸å¼•ç”¨ï¼ˆæ— è¾¹ç•Œæ£€æŸ¥ï¼‰
+	const_reference at(size_type pos)const throw(std::out_of_range);//è¿”å›ä¸‹æ ‡ä¸ºposçš„å…ƒç´ çš„å¼•ç”¨
 
-	/*Êı¾İĞŞ¸ÄÏà¹Øº¯Êı*/
-	void push_back(const value_type &Val); //ÏòÄ©Î²Ìí¼ÓÔªËØ
-	void pop_back();//µ¯³öÎ²ÔªËØ
-	void swap(Array<value_type> &it);//½»»»Á½¸öArray
-	iterator insert(iterator pos, const size_type n, const value_type &Val = value_type())throw(std::out_of_range);//ÔÚ²åÈëµã²åÈën¸öÏàÍ¬ÔªËØ
-	iterator insert(iterator pos, const value_type &Val = value_type())throw(std::out_of_range);//ÔÚ²åÈëµã²åÈëÔªËØ
-	iterator insert(iterator pos, const_iterator first, const_iterator last)throw(std::out_of_range);//ÔÚ²åÈëµã²åÈëÖ¸¶¨·¶Î§µÄÔªËØ
-	iterator erase(iterator pos)throw(std::out_of_range);//É¾³ıÖ¸¶¨ÔªËØ£¬·µ»ØºóÒ»¸öÔªËØµÄµü´úÆ÷£¨»òend()£©
-	iterator erase(iterator first, iterator last)throw(std::out_of_range, std::invalid_argument);//É¾³ıµü´úÆ÷Ö¸¶¨µÄÒ»¶ÎÔªËØ£¬·µ»ØºóÒ»¸öÔªËØµÄµü´úÆ÷£¨»òend()£©
-	void clear();//Çå¿Õ
-	void assign(const_iterator first, const_iterator last)throw(std::invalid_argument);//¸´ÖÆ·¶Î§¸³Öµ
-	void assign(size_type n, const value_type &Val = value_type());//¸³Öµ£¬ÓÃÖ¸¶¨ÔªËØĞòÁĞ¸²¸ÇÈİÆ÷ÄÚËùÓĞÔªËØ
+	/*æ•°æ®ä¿®æ”¹ç›¸å…³å‡½æ•°*/
+	void push_back(const value_type &Val); //å‘æœ«å°¾æ·»åŠ å…ƒç´ 
+	void pop_back();//å¼¹å‡ºå°¾å…ƒç´ 
+	void swap(Array<value_type> &it);//äº¤æ¢ä¸¤ä¸ªArray
+	iterator insert(iterator pos, const size_type n, const value_type &Val = value_type())throw(std::out_of_range);//åœ¨æ’å…¥ç‚¹æ’å…¥nä¸ªç›¸åŒå…ƒç´ 
+	iterator insert(iterator pos, const value_type &Val = value_type())throw(std::out_of_range);//åœ¨æ’å…¥ç‚¹æ’å…¥å…ƒç´ 
+	iterator insert(iterator pos, const_iterator first, const_iterator last)throw(std::out_of_range);//åœ¨æ’å…¥ç‚¹æ’å…¥æŒ‡å®šèŒƒå›´çš„å…ƒç´ 
+	iterator erase(iterator pos)throw(std::out_of_range);//åˆ é™¤æŒ‡å®šå…ƒç´ ï¼Œè¿”å›åä¸€ä¸ªå…ƒç´ çš„è¿­ä»£å™¨ï¼ˆæˆ–end()ï¼‰
+	iterator erase(iterator first, iterator last)throw(std::out_of_range, std::invalid_argument);//åˆ é™¤è¿­ä»£å™¨æŒ‡å®šçš„ä¸€æ®µå…ƒç´ ï¼Œè¿”å›åä¸€ä¸ªå…ƒç´ çš„è¿­ä»£å™¨ï¼ˆæˆ–end()ï¼‰
+	void clear();//æ¸…ç©º
+	void assign(const_iterator first, const_iterator last)throw(std::invalid_argument);//å¤åˆ¶èŒƒå›´èµ‹å€¼
+	void assign(size_type n, const value_type &Val = value_type());//èµ‹å€¼ï¼Œç”¨æŒ‡å®šå…ƒç´ åºåˆ—è¦†ç›–å®¹å™¨å†…æ‰€æœ‰å…ƒç´ 
 
-	/*ÈİÆ÷ÔªËØ±È½Ï*/
-	bool operator==(Array<value_type> rightVal);//ÈİÆ÷ÔªËØÊÇ·ñÏàÍ¬
+	/*å®¹å™¨å…ƒç´ æ¯”è¾ƒ*/
+	bool operator==(Array<value_type> rightVal);//å®¹å™¨å…ƒç´ æ˜¯å¦ç›¸åŒ
 	bool operator!=(Array<value_type> rightVal);
 
 private:
-	pointer Start;//Ö¸ÏòÒÑÓÃ¿Õ¼äµÄÍ·
-	pointer Finish;//Ö¸ÏòÒÑÓÃ¿Õ¼äµÄÎ²
-	pointer End;//Ö¸Ïò¿ÉÓÃ¿Õ¼äµÄÎ²£¬ÓĞEnd>=Finish
+	pointer Start;//æŒ‡å‘å·²ç”¨ç©ºé—´çš„å¤´
+	pointer Finish;//æŒ‡å‘å·²ç”¨ç©ºé—´çš„å°¾
+	pointer End;//æŒ‡å‘å¯ç”¨ç©ºé—´çš„å°¾ï¼Œæœ‰End>=Finish
 };
 
 
@@ -332,8 +332,8 @@ inline typename Array<T>::iterator &Array<T>::iterator::operator-=(difference_ty
 #define const_iterator typename Array<T>::const_iterator
 #define const_reverse_iterator typename Array<T>::const_reverse_iterator
 
-/*¹¹Ôì¡¢Îö¹¹¡¢¸³ÖµÔËËã·ûÏà¹Øº¯Êı*/
-//´ÓÖ¸¶¨´óĞ¡ºÍ³õÖµ¹¹Ôì
+/*æ„é€ ã€ææ„ã€èµ‹å€¼è¿ç®—ç¬¦ç›¸å…³å‡½æ•°*/
+//ä»æŒ‡å®šå¤§å°å’Œåˆå€¼æ„é€ 
 template<typename T>
 Array<T>::Array(size_type size, const value_type &initVal) {
 	Start = new value_type[size];
@@ -342,7 +342,7 @@ Array<T>::Array(size_type size, const value_type &initVal) {
 	for (pointer iLoop = Start; iLoop != End; ++iLoop)
 		*iLoop = initVal;
 }
-//¸´ÖÆ¹¹Ôì
+//å¤åˆ¶æ„é€ 
 template<typename T>
 Array<T>::Array(const Array &it) {
 	const size_type targetSize = it.size();
@@ -353,7 +353,7 @@ Array<T>::Array(const Array &it) {
 		Start[iLoop] = it[iLoop];
 }
 
-//×ªÒÆ¹¹Ôì
+//è½¬ç§»æ„é€ 
 template<typename T>
 Array<T>::Array(Array &&it) {
 	Start = it.Start;
@@ -362,7 +362,7 @@ Array<T>::Array(Array &&it) {
 	it.Start = it.End = it.Finish = nullptr;
 }
 
-//´Ó¸ø¶¨·¶Î§¸´ÖÆ
+//ä»ç»™å®šèŒƒå›´å¤åˆ¶
 template<typename T>
 Array<T>::Array(const_iterator first, const_iterator last) {
 	if (last < first) throw std::invalid_argument("interval invalid!");
@@ -373,7 +373,7 @@ Array<T>::Array(const_iterator first, const_iterator last) {
 
 	for (size_type iLoop = 0; iLoop < n; ++iLoop) Start[iLoop] = first[iLoop];
 }
-//´Ó³õÊ¼»¯ÁĞ±í¹¹Ôì
+//ä»åˆå§‹åŒ–åˆ—è¡¨æ„é€ 
 template<typename T>
 Array<T>::Array(std::initializer_list<value_type> initVals) {
 	size_type n = initVals.size();
@@ -383,19 +383,19 @@ Array<T>::Array(std::initializer_list<value_type> initVals) {
 	for (size_type iLoop = 0; iLoop < n; ++iLoop) Start[iLoop] = *(initVals.begin() + iLoop);
 }
 
-//¿½±´¸³Öµ
+//æ‹·è´èµ‹å€¼
 template<typename T>
 inline Array<T> &Array<T>::operator=(const Array &it) {
-	if (&it != this)  //·Ç×Ô¸³Öµ²ÅÖ´ĞĞ²Ù×÷
+	if (&it != this)  //éè‡ªèµ‹å€¼æ‰æ‰§è¡Œæ“ä½œ
 		assign(it.begin(), it.end());
 
 	return *this;
 }
 
-//×ªÒÆ¸³Öµ
+//è½¬ç§»èµ‹å€¼
 template<typename T>
 inline Array<T> &Array<T>::operator=(Array &&it) {
-	if (&it != this) {//·Ç×Ô¸³Öµ²ÅÖ´ĞĞ²Ù×÷
+	if (&it != this) {//éè‡ªèµ‹å€¼æ‰æ‰§è¡Œæ“ä½œ
 		Start = it.Start;
 		End = it.End;
 		Finish = it.Finish;
@@ -405,7 +405,7 @@ inline Array<T> &Array<T>::operator=(Array &&it) {
 	return *this;
 }
 
-//³õÊ¼»¯ÁĞ±í¸³Öµ
+//åˆå§‹åŒ–åˆ—è¡¨èµ‹å€¼
 template<typename T>
 Array<T> &Array<T>::operator=(std::initializer_list<value_type> Vals) {
 	size_type n = Vals.size();
@@ -423,14 +423,14 @@ Array<T> &Array<T>::operator=(std::initializer_list<value_type> Vals) {
 	return *this;
 }
 
-//Îö¹¹
+//ææ„
 template<typename T>
 inline Array<T>::~Array() {
-	delete[]Start;
+	if (Start != nullptr) delete[]Start;
 }
 
-/*ÈİÁ¿Ïà¹Øº¯Êı*/
-//È·±£capacity()>=n
+/*å®¹é‡ç›¸å…³å‡½æ•°*/
+//ç¡®ä¿capacity()>=n
 template<typename T>
 void Array<T>::reserve(size_type n) {
 	if (capacity() < n) {
@@ -448,7 +448,7 @@ void Array<T>::reserve(size_type n) {
 		End = Start + n;
 	}
 }
-//È·±£size()==n
+//ç¡®ä¿size()==n
 template<typename T>
 void Array<T>::resize(size_type n, const value_type &initVal) {
 	const size_type oldSize = size();
@@ -470,127 +470,127 @@ void Array<T>::resize(size_type n, const value_type &initVal) {
 	} else
 		Finish = Start + n;
 }
-//ÈİÆ÷ÊÇ·ñÎª¿Õ
+//å®¹å™¨æ˜¯å¦ä¸ºç©º
 template<typename T>
 inline bool Array<T>::empty() const {
 	return Start == Finish;
 }
-//ÏµÍ³×î´óÔªËØ¸öÊı
+//ç³»ç»Ÿæœ€å¤§å…ƒç´ ä¸ªæ•°
 template<typename T>
 inline unsigned int Array<T>::max_size() const {
 	return size_type(-1) / sizeof(value_type);
 }
-//ÈİÆ÷ÖĞÔªËØ¸öÊı
+//å®¹å™¨ä¸­å…ƒç´ ä¸ªæ•°
 template<typename T>
 inline unsigned int Array<T>::size() const {
 	return Finish - Start;
 }
-//ÈİÆ÷ÖĞÄÜ¹»´æ´¢µÄÔªËØ¸öÊı£¬ÓĞcapacity()>=size()
+//å®¹å™¨ä¸­èƒ½å¤Ÿå­˜å‚¨çš„å…ƒç´ ä¸ªæ•°ï¼Œæœ‰capacity()>=size()
 template<typename T>
 inline unsigned int Array<T>::capacity() const {
 	return End - Start;
 }
 
-/*µü´úÆ÷Ïà¹Øº¯Êı*/
-//·µ»ØÈİÆ÷Ê×µü´úÆ÷
+/*è¿­ä»£å™¨ç›¸å…³å‡½æ•°*/
+//è¿”å›å®¹å™¨é¦–è¿­ä»£å™¨
 template<typename T>
 inline iterator Array<T>::begin() {
 	return iterator(Start);
 }
-//·µ»ØÈİÆ÷Î²µü´úÆ÷
+//è¿”å›å®¹å™¨å°¾è¿­ä»£å™¨
 template<typename T>
 inline iterator Array<T>::end() {
 	return iterator(Finish);
 }
 template<typename T>
-//·µ»ØÈİÆ÷·´ÏòÊ×µü´úÆ÷
+//è¿”å›å®¹å™¨åå‘é¦–è¿­ä»£å™¨
 inline reverse_iterator Array<T>::rbegin() {
 	return reverse_iterator(end());
 }
-//·µ»ØÈİÆ÷·´ÏòÎ²µü´úÆ÷
+//è¿”å›å®¹å™¨åå‘å°¾è¿­ä»£å™¨
 template<typename T>
 inline reverse_iterator Array<T>::rend() {
 	return reverse_iterator(begin());
 }
-//·µ»ØÈİÆ÷Ê×³£Á¿µü´úÆ÷
+//è¿”å›å®¹å™¨é¦–å¸¸é‡è¿­ä»£å™¨
 template<typename T>
 inline  const_iterator Array<T>::begin() const {
 	return const_iterator(Start);
 }
-//·µ»ØÈİÆ÷Î²³£Á¿µü´úÆ÷
+//è¿”å›å®¹å™¨å°¾å¸¸é‡è¿­ä»£å™¨
 template<typename T>
 inline const_iterator Array<T>::end() const {
 	return const_iterator(Finish);
 }
-//·µ»ØÈİÆ÷³£Á¿·´ÏòÊ×µü´úÆ÷
+//è¿”å›å®¹å™¨å¸¸é‡åå‘é¦–è¿­ä»£å™¨
 template<typename T>
 inline const_reverse_iterator Array<T>::rbegin() const {
 	return const_reverse_iterator(end());
 }
-//·µ»ØÈİÆ÷³£Á¿·´ÏòÎ²µü´úÆ÷
+//è¿”å›å®¹å™¨å¸¸é‡åå‘å°¾è¿­ä»£å™¨
 template<typename T>
 inline const_reverse_iterator Array<T>::rend() const {
 	return const_reverse_iterator(begin());
 }
-//·µ»ØÈİÆ÷Ê×³£Á¿µü´úÆ÷
+//è¿”å›å®¹å™¨é¦–å¸¸é‡è¿­ä»£å™¨
 template<typename T>
 inline  const_iterator Array<T>::cbegin() const {
 	return begin();
 }
-//·µ»ØÈİÆ÷Î²³£Á¿µü´úÆ÷
+//è¿”å›å®¹å™¨å°¾å¸¸é‡è¿­ä»£å™¨
 template<typename T>
 inline const_iterator Array<T>::cend() const {
 	return end();
 }
-//·µ»ØÈİÆ÷³£Á¿·´ÏòÊ×µü´úÆ÷
+//è¿”å›å®¹å™¨å¸¸é‡åå‘é¦–è¿­ä»£å™¨
 template<typename T>
 inline const_reverse_iterator Array<T>::crbegin() const {
 	return rbegin();
 }
-//·µ»ØÈİÆ÷³£Á¿·´ÏòÎ²µü´úÆ÷
+//è¿”å›å®¹å™¨å¸¸é‡åå‘å°¾è¿­ä»£å™¨
 template<typename T>
 inline const_reverse_iterator Array<T>::crend() const {
 	return rend();
 }
-/*Êı¾İ¶ÁÈ¡Ïà¹Øº¯Êı*/
-//·µ»ØÊ×ÔªËØÒıÓÃ
+/*æ•°æ®è¯»å–ç›¸å…³å‡½æ•°*/
+//è¿”å›é¦–å…ƒç´ å¼•ç”¨
 template<typename T>
 inline T &Array<T>::front() {
 	return *Start;
 }
-//·µ»ØÎ²ÔªËØÒıÓÃ
+//è¿”å›å°¾å…ƒç´ å¼•ç”¨
 template<typename T>
 inline T &Array<T>::back() {
 	return *(Finish - 1);
 }
-//·µ»ØÏÂ±êÎªposµÄÔªËØµÄÒıÓÃ£¨ÎŞ±ß½ç¼ì²é£©
+//è¿”å›ä¸‹æ ‡ä¸ºposçš„å…ƒç´ çš„å¼•ç”¨ï¼ˆæ— è¾¹ç•Œæ£€æŸ¥ï¼‰
 template<typename T>
 inline T &Array<T>::operator[](size_type pos) {
 	return Start[pos];
 }
-//·µ»ØÏÂ±êÎªposµÄÔªËØµÄÒıÓÃ
+//è¿”å›ä¸‹æ ‡ä¸ºposçš„å…ƒç´ çš„å¼•ç”¨
 template<typename T>
 inline T &Array<T>::at(size_type pos) {
 	if (pos >= size()) throw std::out_of_range("offset out of range!");
 
 	return Start[pos];
 }
-//·µ»ØÊ×ÔªËØ³£ÒıÓÃ
+//è¿”å›é¦–å…ƒç´ å¸¸å¼•ç”¨
 template<typename T>
 inline const T &Array<T>::front()const {
 	return *Start;
 }
-//·µ»ØÎ²ÔªËØ³£ÒıÓÃ
+//è¿”å›å°¾å…ƒç´ å¸¸å¼•ç”¨
 template<typename T>
 inline const T &Array<T>::back()const {
 	return *(Finish - 1);
 }
-//·µ»ØÏÂ±êÎªposµÄÔªËØµÄ³£ÒıÓÃ£¨ÎŞ±ß½ç¼ì²é£©
+//è¿”å›ä¸‹æ ‡ä¸ºposçš„å…ƒç´ çš„å¸¸å¼•ç”¨ï¼ˆæ— è¾¹ç•Œæ£€æŸ¥ï¼‰
 template<typename T>
 inline const T &Array<T>::operator[](size_type pos)const {
 	return Start[pos];
 }
-//·µ»ØÏÂ±êÎªposµÄÔªËØµÄ³£ÒıÓÃ
+//è¿”å›ä¸‹æ ‡ä¸ºposçš„å…ƒç´ çš„å¸¸å¼•ç”¨
 template<typename T>
 inline const T &Array<T>::at(size_type pos)const {
 	if (pos >= size()) throw std::out_of_range("offset out of range!");
@@ -598,25 +598,25 @@ inline const T &Array<T>::at(size_type pos)const {
 	return Start[pos];
 }
 
-/*Êı¾İĞŞ¸ÄÏà¹Øº¯Êı*/
-//ÏòÄ©Î²Ìí¼ÓÔªËØ
+/*æ•°æ®ä¿®æ”¹ç›¸å…³å‡½æ•°*/
+//å‘æœ«å°¾æ·»åŠ å…ƒç´ 
 template<typename T>
 void Array<T>::push_back(const value_type &Val) {
-	if (Finish == End) {//ÎŞ¿ÉÓÃ¿Õ¼ä
+	if (Finish == End) {//æ— å¯ç”¨ç©ºé—´
 		if (End == Start)reserve(1);
-		else reserve(3 * size() / 2);//ÈİÁ¿ÊÇ·ñÎª0
+		else reserve(3 * size() / 2);//å®¹é‡æ˜¯å¦ä¸º0
 	}
 
 	*Finish = Val;
 	++Finish;
 }
-//µ¯³öÎ²ÔªËØ
+//å¼¹å‡ºå°¾å…ƒç´ 
 template<typename T>
 inline void Array<T>::pop_back() {
 	if (Finish != Start) --Finish;
 }
 
-//½»»»Á½¸öArray
+//äº¤æ¢ä¸¤ä¸ªArray
 template<typename T>
 inline void Array<T>::swap(Array<T> &it) {
 	pointer tmp = Start;
@@ -634,14 +634,14 @@ inline void swap(Array<T> &leftVal, Array<T> &rightVal) {
 	leftVal.swap(rightVal);
 }
 
-//ÔÚ²åÈëµã²åÈën¸öÏàÍ¬ÔªËØ
+//åœ¨æ’å…¥ç‚¹æ’å…¥nä¸ªç›¸åŒå…ƒç´ 
 template<typename T>
 iterator Array<T>::insert(iterator pos, const size_type n, const value_type &Val) {
 	if (0 == n)return pos;
 
 	if (pos.Ptr < Start || pos.Ptr > Finish) throw std::out_of_range("iterator out of range!");
 
-	if (size_type(End - Finish) >= n) {//»¹ÓĞ¿ÉÓÃ¿Õ¼ä
+	if (size_type(End - Finish) >= n) {//è¿˜æœ‰å¯ç”¨ç©ºé—´
 		for (pointer iLoop = Finish; iLoop >= pos.Ptr; --iLoop)
 			iLoop[n] = *iLoop;
 
@@ -651,11 +651,11 @@ iterator Array<T>::insert(iterator pos, const size_type n, const value_type &Val
 			pos[iLoop] = Val;
 
 		return pos;
-	} else { //ÎŞ¿ÉÓÃ¿Õ¼ä
+	} else { //æ— å¯ç”¨ç©ºé—´
 		const size_type oldSize = size();
 		const size_type targetCap = oldSize + (n > oldSize / 2 ? n : (oldSize / 2));
 		const size_type position = pos.Ptr - Start;
-		//ÖØĞÂ·ÖÅä¿Õ¼ä£¬¸´ÖÆÊı¾İ
+		//é‡æ–°åˆ†é…ç©ºé—´ï¼Œå¤åˆ¶æ•°æ®
 		pointer tmp = new value_type[targetCap];
 
 		for (size_type iLoop = 0; iLoop < position; ++iLoop)
@@ -670,7 +670,7 @@ iterator Array<T>::insert(iterator pos, const size_type n, const value_type &Val
 		for (size_type iLoop = oldSize + n; iLoop < targetCap; ++iLoop)
 			tmp[iLoop] = value_type();
 
-		//³·Ïú¾É¿Õ¼ä£¬ĞŞ¸ÄÖ¸Õë
+		//æ’¤é”€æ—§ç©ºé—´ï¼Œä¿®æ”¹æŒ‡é’ˆ
 		delete[]Start;
 		Start = tmp;
 		Finish = Start + oldSize + n;
@@ -679,7 +679,7 @@ iterator Array<T>::insert(iterator pos, const size_type n, const value_type &Val
 	}
 }
 
-//ÔÚ²åÈëµã²åÈëÖ¸¶¨·¶Î§µÄÔªËØ
+//åœ¨æ’å…¥ç‚¹æ’å…¥æŒ‡å®šèŒƒå›´çš„å…ƒç´ 
 template<typename T>
 iterator Array<T>::insert(iterator pos, const_iterator first, const_iterator last) {
 	if (pos.Ptr < Start || pos.Ptr > Finish) throw std::out_of_range("iterator out of range!");
@@ -690,28 +690,28 @@ iterator Array<T>::insert(iterator pos, const_iterator first, const_iterator las
 
 	if (0 == n)return pos;
 
-	if (size_type(End - Finish) >= n) {//»¹ÓĞ¿ÉÓÃ¿Õ¼ä
+	if (size_type(End - Finish) >= n) {//è¿˜æœ‰å¯ç”¨ç©ºé—´
 		for (pointer iLoop = Finish; iLoop >= pos.Ptr; --iLoop)
 			*(iLoop + 1) = *iLoop;
 
 		Finish += n;
 
 		for (size_type iLoop = 0; iLoop < n; ++iLoop)
-			pos[iLoop] = first[iLoop]; //¸³Öµ
+			pos[iLoop] = first[iLoop]; //èµ‹å€¼
 
 		return pos;
-	} else { //ÎŞ¿ÉÓÃ¿Õ¼ä
+	} else { //æ— å¯ç”¨ç©ºé—´
 		const size_type oldSize = size();
 		const size_type targetCap = oldSize + (n > oldSize / 2 ? n : (oldSize / 2));
 		const size_type position = pos.Ptr - Start;
-		//ÖØĞÂ·ÖÅä¿Õ¼ä£¬¸´ÖÆÊı¾İ
+		//é‡æ–°åˆ†é…ç©ºé—´ï¼Œå¤åˆ¶æ•°æ®
 		pointer tmp = new value_type[targetCap];
 
 		for (size_type iLoop = 0; iLoop < position; ++iLoop)
 			tmp[iLoop] = Start[iLoop];
 
 		for (size_type iLoop = position; iLoop < position + n; ++iLoop)
-			tmp[iLoop] = *(first++); //¸³Öµ
+			tmp[iLoop] = *(first++); //èµ‹å€¼
 
 		for (size_type iLoop = position + n; iLoop < oldSize + n; ++iLoop)
 			tmp[iLoop] = *(Start + iLoop - n);
@@ -719,7 +719,7 @@ iterator Array<T>::insert(iterator pos, const_iterator first, const_iterator las
 		for (size_type iLoop = oldSize + n; iLoop < targetCap; ++iLoop)
 			tmp[iLoop] = value_type();
 
-		//³·Ïú¾É¿Õ¼ä£¬ĞŞ¸ÄÖ¸Õë
+		//æ’¤é”€æ—§ç©ºé—´ï¼Œä¿®æ”¹æŒ‡é’ˆ
 		delete[]Start;
 		Start = tmp;
 		Finish = Start + oldSize + n;
@@ -728,13 +728,13 @@ iterator Array<T>::insert(iterator pos, const_iterator first, const_iterator las
 	}
 }
 
-//ÔÚ²åÈëµã²åÈëÒ»¸öÔªËØ
+//åœ¨æ’å…¥ç‚¹æ’å…¥ä¸€ä¸ªå…ƒç´ 
 template<typename T>
 inline iterator Array<T>::insert(iterator pos, const value_type &Val) {
 	return insert(pos, 1, Val);
 }
 
-//É¾³ıÖ¸¶¨ÔªËØ£¬·µ»ØºóÒ»¸öÔªËØµÄµü´úÆ÷£¨»òend()£©
+//åˆ é™¤æŒ‡å®šå…ƒç´ ï¼Œè¿”å›åä¸€ä¸ªå…ƒç´ çš„è¿­ä»£å™¨ï¼ˆæˆ–end()ï¼‰
 template<typename T>
 iterator Array<T>::erase(iterator pos) {
 	if (pos.Ptr < Start || pos.Ptr > Finish) throw std::out_of_range("iterator out of range!");
@@ -746,7 +746,7 @@ iterator Array<T>::erase(iterator pos) {
 	return pos;
 }
 
-//É¾³ıµü´úÆ÷Ö¸¶¨µÄÒ»¶ÎÔªËØ£¬·µ»ØºóÒ»¸öÔªËØµÄµü´úÆ÷£¨»òend()£©
+//åˆ é™¤è¿­ä»£å™¨æŒ‡å®šçš„ä¸€æ®µå…ƒç´ ï¼Œè¿”å›åä¸€ä¸ªå…ƒç´ çš„è¿­ä»£å™¨ï¼ˆæˆ–end()ï¼‰
 template<typename T>
 iterator Array<T>::erase(iterator first, iterator last) {
 	if (first.Ptr < Start || last.Ptr > Finish) throw std::out_of_range("iterator out of range!");
@@ -762,13 +762,13 @@ iterator Array<T>::erase(iterator first, iterator last) {
 	return first;
 }
 
-//Çå¿Õ
+//æ¸…ç©º
 template<typename T>
 inline void Array<T>::clear() {
 	Finish = Start;
 }
 
-//¸´ÖÆ·¶Î§¸³Öµ
+//å¤åˆ¶èŒƒå›´èµ‹å€¼
 template<typename T>
 void Array<T>::assign(const_iterator first, const_iterator last) {
 	if (last.Ptr < first.Ptr) throw std::invalid_argument("interval invalid!");
@@ -786,7 +786,7 @@ void Array<T>::assign(const_iterator first, const_iterator last) {
 	for (size_type iLoop = 0; iLoop < n; ++iLoop) Start[iLoop] = first[iLoop];
 }
 
-//¸³Öµ£¬ÓÃÖ¸¶¨ÔªËØĞòÁĞ¸²¸ÇÈİÆ÷ÄÚËùÓĞÔªËØ
+//èµ‹å€¼ï¼Œç”¨æŒ‡å®šå…ƒç´ åºåˆ—è¦†ç›–å®¹å™¨å†…æ‰€æœ‰å…ƒç´ 
 template<typename T>
 void Array<T>::assign(size_type n, const value_type &Val) {
 	if (capacity() < n) {
@@ -798,7 +798,7 @@ void Array<T>::assign(size_type n, const value_type &Val) {
 	for (Finish = Start; size() < n; ++Finish) *Finish = Val;
 }
 
-/*ÈİÆ÷ÔªËØ±È½Ï*/
+/*å®¹å™¨å…ƒç´ æ¯”è¾ƒ*/
 template<typename T>
 bool Array<T>::operator==(Array<value_type> rightVal) {
 	if (size() != rightVal.size())return false;
