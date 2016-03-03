@@ -1,2 +1,2 @@
 # Array
-Mocking "vector"
+This is a mock `vector` in `STL`
