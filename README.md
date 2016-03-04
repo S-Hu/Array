@@ -1,2 +1,2 @@
 # Array
-This is a mock `vector`
+mock `vector`
